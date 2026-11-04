@@ -1,0 +1,13 @@
+# Archivos temporales de Visual Studio
+.vs/
+*.user
+*.suo
+*.vsuo
+
+# Archivos generados al compilar
+**/bin/
+**/obj/
+
+# Archivos temporales
+*.tmp
+*.bak
