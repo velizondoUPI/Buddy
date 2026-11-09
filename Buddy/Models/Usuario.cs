@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Buddy.Models
 {
@@ -16,6 +17,7 @@ namespace Buddy.Models
 
         public decimal AlturaMetros { get; private set; }
 
+        [JsonConstructor]
         public Usuario(
             int id,
             string nombre,
@@ -33,8 +35,10 @@ namespace Buddy.Models
             if (string.IsNullOrWhiteSpace(nombreUsuario))
                 throw new ArgumentException("El nombre de usuario es obligatorio.", nameof(nombreUsuario));
 
-            if (fechaNacimiento.Date > DateTime.Today)
-                throw new ArgumentException("La fecha de nacimiento no puede ser futura.", nameof(fechaNacimiento));
+            if (fechaNacimiento.Date >= DateTime.Today)
+                throw new ArgumentException(
+                    "La fecha de nacimiento debe ser anterior a hoy.",
+                    nameof(fechaNacimiento));
 
             if (pesoKg <= 0)
                 throw new ArgumentOutOfRangeException(nameof(pesoKg));

@@ -24,18 +24,21 @@ namespace Buddy.Views
         {
             LimpiarCampos();
         }
+
         private void LimpiarCampos()
         {
             txtNombre.Clear();
             txtNombreUsuario.Clear();
 
-            dtpFechaNacimiento.Value = DateTime.Today;
+            // Restablecer una fecha válida dentro del calendario.
+            dtpFechaNacimiento.Value = dtpFechaNacimiento.MaxDate;
 
             nudPesoKg.Value = 0;
             nudAlturaMetros.Value = 0;
 
             txtNombre.Focus();
         }
+
 
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
