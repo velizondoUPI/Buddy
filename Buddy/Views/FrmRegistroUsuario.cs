@@ -25,12 +25,13 @@ namespace Buddy.Views
             LimpiarCampos();
         }
 
+
         private void LimpiarCampos()
         {
             txtNombre.Clear();
             txtNombreUsuario.Clear();
+            txtCorreoElectronico.Clear();
 
-            // Restablecer una fecha válida dentro del calendario.
             dtpFechaNacimiento.Value = dtpFechaNacimiento.MaxDate;
 
             nudPesoKg.Value = 0;
@@ -38,6 +39,7 @@ namespace Buddy.Views
 
             txtNombre.Focus();
         }
+
 
 
         private void btnRegistrar_Click(object sender, EventArgs e)
@@ -79,25 +81,34 @@ namespace Buddy.Views
 
             try
             {
+
                 Usuario nuevoUsuario = usuarioController.RegistrarUsuario(
                     txtNombre.Text,
                     txtNombreUsuario.Text,
                     dtpFechaNacimiento.Value.Date,
                     nudPesoKg.Value,
-                    nudAlturaMetros.Value
+                    nudAlturaMetros.Value,
+                    txtCorreoElectronico.Text
                 );
+
+
 
                 MessageBox.Show(
                     $"Usuario registrado correctamente.\n\n" +
                     $"ID: {nuevoUsuario.Id}\n" +
                     $"Nombre: {nuevoUsuario.Nombre}\n" +
                     $"Usuario: {nuevoUsuario.NombreUsuario}\n" +
+                    $"Correo: {nuevoUsuario.CorreoElectronico}\n" +
+                    $"Edad: {nuevoUsuario.Edad} años\n" +
                     $"Peso: {nuevoUsuario.PesoKg} kg\n" +
-                    $"Altura: {nuevoUsuario.AlturaMetros} m",
+                    $"Altura: {nuevoUsuario.AlturaMetros} m\n" +
+                    $"IMC: {nuevoUsuario.IMC:F2}",
                     "Buddy - Registro exitoso",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information
                 );
+
+
 
                 LimpiarCampos();
             }
@@ -108,6 +119,17 @@ namespace Buddy.Views
                     "Error de registro",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning
+                );
+            }
+
+
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Buddy - Protección de datos",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
                 );
             }
 

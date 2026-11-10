@@ -41,6 +41,8 @@
             nudAlturaMetros = new NumericUpDown();
             btnRegistrar = new Button();
             btnLimpiar = new Button();
+            label1 = new Label();
+            txtCorreoElectronico = new TextBox();
             ((System.ComponentModel.ISupportInitialize)nudPesoKg).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudAlturaMetros).BeginInit();
             SuspendLayout();
@@ -77,7 +79,7 @@
             // 
             lblNombreUsuario.AutoSize = true;
             lblNombreUsuario.Font = new Font("Segoe UI", 10F);
-            lblNombreUsuario.Location = new Point(43, 142);
+            lblNombreUsuario.Location = new Point(43, 193);
             lblNombreUsuario.Name = "lblNombreUsuario";
             lblNombreUsuario.Size = new Size(130, 19);
             lblNombreUsuario.TabIndex = 3;
@@ -85,7 +87,7 @@
             // 
             // txtNombreUsuario
             // 
-            txtNombreUsuario.Location = new Point(186, 138);
+            txtNombreUsuario.Location = new Point(186, 189);
             txtNombreUsuario.Name = "txtNombreUsuario";
             txtNombreUsuario.Size = new Size(255, 23);
             txtNombreUsuario.TabIndex = 4;
@@ -95,7 +97,7 @@
             dtpFechaNacimiento.CalendarFont = new Font("Segoe UI", 10F);
             dtpFechaNacimiento.CustomFormat = "dd/MM/yyyy";
             dtpFechaNacimiento.Format = DateTimePickerFormat.Custom;
-            dtpFechaNacimiento.Location = new Point(186, 186);
+            dtpFechaNacimiento.Location = new Point(186, 237);
             dtpFechaNacimiento.MaxDate = new DateTime(2026, 11, 4, 0, 0, 0, 0);
             dtpFechaNacimiento.Name = "dtpFechaNacimiento";
             dtpFechaNacimiento.Size = new Size(250, 23);
@@ -106,7 +108,7 @@
             // 
             lblFechaNacimiento.AutoSize = true;
             lblFechaNacimiento.Font = new Font("Segoe UI", 10F);
-            lblFechaNacimiento.Location = new Point(43, 190);
+            lblFechaNacimiento.Location = new Point(43, 241);
             lblFechaNacimiento.Name = "lblFechaNacimiento";
             lblFechaNacimiento.Size = new Size(137, 19);
             lblFechaNacimiento.TabIndex = 7;
@@ -116,7 +118,7 @@
             // 
             lblPeso.AutoSize = true;
             lblPeso.Font = new Font("Segoe UI", 10F);
-            lblPeso.Location = new Point(43, 231);
+            lblPeso.Location = new Point(43, 282);
             lblPeso.Name = "lblPeso";
             lblPeso.Size = new Size(67, 19);
             lblPeso.TabIndex = 8;
@@ -126,7 +128,7 @@
             // 
             nudPesoKg.DecimalPlaces = 2;
             nudPesoKg.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-            nudPesoKg.Location = new Point(186, 231);
+            nudPesoKg.Location = new Point(186, 282);
             nudPesoKg.Maximum = new decimal(new int[] { 500, 0, 0, 0 });
             nudPesoKg.Name = "nudPesoKg";
             nudPesoKg.Size = new Size(250, 23);
@@ -135,7 +137,7 @@
             // lblAltura
             // 
             lblAltura.AutoSize = true;
-            lblAltura.Location = new Point(43, 273);
+            lblAltura.Location = new Point(43, 324);
             lblAltura.Name = "lblAltura";
             lblAltura.Size = new Size(64, 15);
             lblAltura.TabIndex = 10;
@@ -145,7 +147,7 @@
             // 
             nudAlturaMetros.DecimalPlaces = 2;
             nudAlturaMetros.Increment = new decimal(new int[] { 1, 0, 0, 131072 });
-            nudAlturaMetros.Location = new Point(186, 273);
+            nudAlturaMetros.Location = new Point(186, 324);
             nudAlturaMetros.Maximum = new decimal(new int[] { 3, 0, 0, 0 });
             nudAlturaMetros.Name = "nudAlturaMetros";
             nudAlturaMetros.Size = new Size(255, 23);
@@ -153,7 +155,7 @@
             // 
             // btnRegistrar
             // 
-            btnRegistrar.Location = new Point(166, 335);
+            btnRegistrar.Location = new Point(166, 386);
             btnRegistrar.Name = "btnRegistrar";
             btnRegistrar.Size = new Size(125, 23);
             btnRegistrar.TabIndex = 12;
@@ -163,7 +165,7 @@
             // 
             // btnLimpiar
             // 
-            btnLimpiar.Location = new Point(332, 335);
+            btnLimpiar.Location = new Point(332, 386);
             btnLimpiar.Name = "btnLimpiar";
             btnLimpiar.Size = new Size(125, 23);
             btnLimpiar.TabIndex = 13;
@@ -171,11 +173,30 @@
             btnLimpiar.UseVisualStyleBackColor = true;
             btnLimpiar.Click += btnLimpiar_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 10F);
+            label1.Location = new Point(43, 149);
+            label1.Name = "label1";
+            label1.Size = new Size(124, 19);
+            label1.TabIndex = 14;
+            label1.Text = "Correo electrónico:";
+            // 
+            // txtCorreoElectronico
+            // 
+            txtCorreoElectronico.Location = new Point(186, 149);
+            txtCorreoElectronico.Name = "txtCorreoElectronico";
+            txtCorreoElectronico.Size = new Size(255, 23);
+            txtCorreoElectronico.TabIndex = 15;
+            // 
             // FrmRegistroUsuario
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(txtCorreoElectronico);
+            Controls.Add(label1);
             Controls.Add(btnLimpiar);
             Controls.Add(btnRegistrar);
             Controls.Add(nudAlturaMetros);
@@ -212,5 +233,7 @@
         private NumericUpDown nudAlturaMetros;
         private Button btnRegistrar;
         private Button btnLimpiar;
+        private Label label1;
+        private TextBox txtCorreoElectronico;
     }
 }

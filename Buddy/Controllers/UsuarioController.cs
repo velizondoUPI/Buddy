@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using Buddy.Models;
 using Buddy.Data;
 
@@ -31,8 +32,36 @@ namespace Buddy.Controllers
             string nombreUsuario,
             DateTime fechaNacimiento,
             decimal pesoKg,
-            decimal alturaMetros)
+            decimal alturaMetros,
+            string correoElectronico)
         {
+            // Validar que el correo sea obligatorio.
+            if (string.IsNullOrWhiteSpace(correoElectronico))
+            {
+                throw new ArgumentException(
+                    "Debe ingresar un correo electrónico.");
+            }
+
+            correoElectronico = correoElectronico.Trim();
+
+            // Validar el formato básico del correo.
+            try
+            {
+                var direccion = new MailAddress(correoElectronico);
+
+                if (!direccion.Address.Equals(
+                    correoElectronico,
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new FormatException();
+                }
+            }
+            catch (FormatException)
+            {
+                throw new ArgumentException(
+                    "Debe ingresar un correo electrónico válido.");
+            }
+
             // Evitar nombres de usuario duplicados.
             if (usuarios.Any(u =>
                 u.NombreUsuario.Equals(
@@ -43,6 +72,17 @@ namespace Buddy.Controllers
                     "El nombre de usuario ya está registrado.");
             }
 
+            // Evitar correos electrónicos duplicados.
+            if (usuarios.Any(u =>
+                !string.IsNullOrWhiteSpace(u.CorreoElectronico) &&
+                u.CorreoElectronico.Equals(
+                    correoElectronico,
+                    StringComparison.OrdinalIgnoreCase)))
+            {
+                throw new ArgumentException(
+                    "El correo electrónico ya está registrado.");
+            }
+
             // Crear el usuario utilizando el modelo.
             Usuario nuevoUsuario = new Usuario(
                 siguienteId,
@@ -50,7 +90,8 @@ namespace Buddy.Controllers
                 nombreUsuario,
                 fechaNacimiento,
                 pesoKg,
-                alturaMetros
+                alturaMetros,
+                correoElectronico
             );
 
             // Agregar el usuario a la lista.

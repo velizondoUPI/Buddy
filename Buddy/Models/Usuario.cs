@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Text.Json.Serialization;
 
 namespace Buddy.Models
@@ -11,11 +12,40 @@ namespace Buddy.Models
 
         public string NombreUsuario { get; private set; }
 
+        public string? CorreoElectronico { get; private set; }
+
         public DateTime FechaNacimiento { get; private set; }
 
         public decimal PesoKg { get; private set; }
 
         public decimal AlturaMetros { get; private set; }
+
+        public int Edad
+        {
+            get
+            {
+                int edad = DateTime.Today.Year - FechaNacimiento.Year;
+
+                if (FechaNacimiento.Date > DateTime.Today.AddYears(-edad))
+                {
+                    edad--;
+                }
+
+                return edad;
+            }
+        }
+
+        public decimal IMC
+        {
+            get
+            {
+                return Math.Round(
+                    PesoKg / (AlturaMetros * AlturaMetros),
+                    2
+                );
+            }
+        }
+
 
         [JsonConstructor]
         public Usuario(
@@ -24,16 +54,26 @@ namespace Buddy.Models
             string nombreUsuario,
             DateTime fechaNacimiento,
             decimal pesoKg,
-            decimal alturaMetros)
+            decimal alturaMetros,
+            string? correoElectronico = null)
         {
             if (id <= 0)
                 throw new ArgumentOutOfRangeException(nameof(id));
 
             if (string.IsNullOrWhiteSpace(nombre))
-                throw new ArgumentException("El nombre es obligatorio.", nameof(nombre));
+                throw new ArgumentException(
+                    "El nombre es obligatorio.", nameof(nombre));
 
             if (string.IsNullOrWhiteSpace(nombreUsuario))
-                throw new ArgumentException("El nombre de usuario es obligatorio.", nameof(nombreUsuario));
+                throw new ArgumentException(
+                    "El nombre de usuario es obligatorio.",
+                    nameof(nombreUsuario));
+
+            if (correoElectronico != null &&
+                string.IsNullOrWhiteSpace(correoElectronico))
+                throw new ArgumentException(
+                    "El correo electrónico no puede estar vacío.",
+                    nameof(correoElectronico));
 
             if (fechaNacimiento.Date >= DateTime.Today)
                 throw new ArgumentException(
@@ -49,6 +89,7 @@ namespace Buddy.Models
             Id = id;
             Nombre = nombre.Trim();
             NombreUsuario = nombreUsuario.Trim();
+            CorreoElectronico = correoElectronico?.Trim();
             FechaNacimiento = fechaNacimiento;
             PesoKg = pesoKg;
             AlturaMetros = alturaMetros;
