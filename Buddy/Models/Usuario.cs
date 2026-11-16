@@ -94,5 +94,46 @@ namespace Buddy.Models
             PesoKg = pesoKg;
             AlturaMetros = alturaMetros;
         }
+
+        public void ActualizarDatos(
+    string nombre,
+    string nombreUsuario,
+    DateTime fechaNacimiento,
+    decimal pesoKg,
+    decimal alturaMetros,
+    string correoElectronico)
+        {
+            if (string.IsNullOrWhiteSpace(nombre))
+                throw new ArgumentException(
+                    "El nombre es obligatorio.");
+
+            if (string.IsNullOrWhiteSpace(nombreUsuario))
+                throw new ArgumentException(
+                    "El nombre de usuario es obligatorio.");
+
+            if (string.IsNullOrWhiteSpace(correoElectronico))
+                throw new ArgumentException(
+                    "El correo electrónico es obligatorio.");
+
+            if (fechaNacimiento.Date >= DateTime.Today)
+                throw new ArgumentException(
+                    "La fecha de nacimiento debe ser anterior a hoy.");
+
+            if (pesoKg <= 0)
+                throw new ArgumentException(
+                    "El peso debe ser mayor que cero.");
+
+            if (alturaMetros <= 0)
+                throw new ArgumentException(
+                    "La altura debe ser mayor que cero.");
+
+            Nombre = nombre.Trim();
+            NombreUsuario = nombreUsuario.Trim();
+            CorreoElectronico = correoElectronico.Trim();
+            FechaNacimiento = fechaNacimiento;
+            PesoKg = pesoKg;
+            AlturaMetros = alturaMetros;
+        }
     }
+
 }
