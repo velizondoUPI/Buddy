@@ -14,11 +14,13 @@ namespace Buddy.Views
     {
         private readonly UsuarioController usuarioController;
 
-        public FrmConsultaUsuarios()
+        public FrmConsultaUsuarios(UsuarioController usuarioController)
         {
             InitializeComponent();
 
-            usuarioController = new UsuarioController();
+            // Usar el controlador compartido para mantener los datos coherentes.
+            this.usuarioController = usuarioController
+                ?? throw new ArgumentNullException(nameof(usuarioController));
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -28,9 +30,12 @@ namespace Buddy.Views
 
         private void FrmConsultaUsuarios_Load(object sender, EventArgs e)
         {
-            // Obtener los usuarios registrados.
-            var usuarios = usuarioController.ObtenerUsuarios();
+            ConfigurarColumnas();
+            CargarUsuarios();
+        }
 
+        private void ConfigurarColumnas()
+        {
             // Configurar las columnas de la tabla.
             dgvUsuarios.AutoGenerateColumns = false;
             dgvUsuarios.Columns.Clear();
@@ -52,6 +57,14 @@ namespace Buddy.Views
             dgvUsuarios.Columns["PesoKg"].FillWeight = 65;
             dgvUsuarios.Columns["AlturaMetros"].FillWeight = 65;
             dgvUsuarios.Columns["IMC"].FillWeight = 55;
+        }
+
+        private void CargarUsuarios(int? idSeleccionar = null)
+        {
+            // Obtener los usuarios registrados.
+            var usuarios = usuarioController.ObtenerUsuarios();
+
+            dgvUsuarios.Rows.Clear();
 
             // Mostrar cada usuario en la tabla.
             foreach (var usuario in usuarios)
@@ -67,9 +80,58 @@ namespace Buddy.Views
                     usuario.IMC
                 );
             }
+
+            // Mantener la búsqueda que el usuario tenía escrita.
+            AplicarFiltro();
+
+            if (idSeleccionar.HasValue)
+                SeleccionarUsuario(idSeleccionar.Value);
+        }
+
+        private void SeleccionarUsuario(int id)
+        {
+            dgvUsuarios.ClearSelection();
+
+            foreach (DataGridViewRow fila in dgvUsuarios.Rows)
+            {
+                if (fila.Visible && fila.Cells["Id"].Value is int idFila && idFila == id)
+                {
+                    dgvUsuarios.CurrentCell = fila.Cells["Nombre"];
+                    fila.Selected = true;
+                    return;
+                }
+            }
+        }
+
+        private int? ObtenerIdSeleccionado()
+        {
+            if (dgvUsuarios.SelectedRows.Count == 0)
+                return null;
+
+            return dgvUsuarios.SelectedRows[0].Cells["Id"].Value as int?;
+        }
+
+        private void btnActualizarUsuario_Click(object sender, EventArgs e)
+        {
+            int? idSeleccionado = ObtenerIdSeleccionado();
+
+            using var frmActualizar = new FrmActualizarUsuario(
+                usuarioController,
+                idSeleccionado);
+
+            if (frmActualizar.ShowDialog(this) == DialogResult.OK)
+            {
+                // Mostrar los datos actualizados desde el controlador compartido.
+                CargarUsuarios(frmActualizar.IdUsuarioActualizado ?? idSeleccionado);
+            }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            AplicarFiltro();
+        }
+
+        private void AplicarFiltro()
         {
             // Obtener el texto ingresado en el buscador.
             string busqueda = txtBuscarUsuario.Text.Trim();

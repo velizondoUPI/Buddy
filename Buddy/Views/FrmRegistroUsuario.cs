@@ -13,11 +13,15 @@ namespace Buddy.Views
     public partial class FrmRegistroUsuario : Form
     {
 
-        private readonly UsuarioController usuarioController = new UsuarioController();
-        public FrmRegistroUsuario()
-        {
+        // Controlador compartido con el resto de formularios.
+        private readonly UsuarioController usuarioController;
 
+        public FrmRegistroUsuario(UsuarioController usuarioController)
+        {
             InitializeComponent();
+
+            this.usuarioController = usuarioController
+                ?? throw new ArgumentNullException(nameof(usuarioController));
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)

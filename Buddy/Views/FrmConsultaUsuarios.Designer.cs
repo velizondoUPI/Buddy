@@ -48,6 +48,7 @@
             lblUsuarioTitulo = new Label();
             lblDetalleNombre = new Label();
             lblNombreTitulo = new Label();
+            btnActualizarUsuario = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvUsuarios).BeginInit();
             grpDetalleUsuario.SuspendLayout();
             SuspendLayout();
@@ -255,12 +256,23 @@
             lblNombreTitulo.Size = new Size(54, 15);
             lblNombreTitulo.TabIndex = 0;
             lblNombreTitulo.Text = "Nombre:";
-            // 
+            //
+            // btnActualizarUsuario
+            //
+            btnActualizarUsuario.Location = new Point(705, 79);
+            btnActualizarUsuario.Name = "btnActualizarUsuario";
+            btnActualizarUsuario.Size = new Size(130, 28);
+            btnActualizarUsuario.TabIndex = 6;
+            btnActualizarUsuario.Text = "Actualizar usuario";
+            btnActualizarUsuario.UseVisualStyleBackColor = true;
+            btnActualizarUsuario.Click += btnActualizarUsuario_Click;
+            //
             // FrmConsultaUsuarios
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(934, 561);
+            Controls.Add(btnActualizarUsuario);
             Controls.Add(grpDetalleUsuario);
             Controls.Add(dgvUsuarios);
             Controls.Add(txtBuscarUsuario);
@@ -302,5 +314,6 @@
         private Label lblPesoTitulo;
         private Label lblDetalleEdad;
         private Label lblDetalleIMC;
+        private Button btnActualizarUsuario;
     }
 }

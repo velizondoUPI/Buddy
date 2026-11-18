@@ -118,5 +118,80 @@ namespace Buddy.Controllers
         {
             return new List<Usuario>(usuarios);
         }
+
+        public void ActualizarUsuario(
+            int id,
+            string nombre,
+            string nombreUsuario,
+            DateTime fechaNacimiento,
+            decimal pesoKg,
+            decimal alturaMetros,
+            string correoElectronico)
+        {
+            // Buscar al usuario que se desea actualizar.
+            Usuario usuario = usuarios.FirstOrDefault(u => u.Id == id)
+                ?? throw new ArgumentException("El usuario no existe.");
+
+            // Validar el correo electrónico.
+            if (string.IsNullOrWhiteSpace(correoElectronico))
+                throw new ArgumentException("El correo es obligatorio.");
+
+            correoElectronico = correoElectronico.Trim();
+
+            try
+            {
+                var direccion = new MailAddress(correoElectronico);
+
+                if (!direccion.Address.Equals(
+                    correoElectronico,
+                    StringComparison.OrdinalIgnoreCase))
+                    throw new FormatException();
+            }
+            catch (FormatException)
+            {
+                throw new ArgumentException("El correo electrónico no es válido.");
+            }
+
+            // Verificar duplicados, excluyendo al usuario actual.
+            if (usuarios.Any(u =>
+                u.Id != id &&
+                u.NombreUsuario.Equals(
+                    nombreUsuario?.Trim(),
+                    StringComparison.OrdinalIgnoreCase)))
+                throw new ArgumentException(
+                    "El nombre de usuario ya está registrado.");
+
+            if (usuarios.Any(u =>
+                u.Id != id &&
+                !string.IsNullOrWhiteSpace(u.CorreoElectronico) &&
+                u.CorreoElectronico.Equals(
+                    correoElectronico,
+                    StringComparison.OrdinalIgnoreCase)))
+                throw new ArgumentException(
+                    "El correo electrónico ya está registrado.");
+
+            // Crear la versión actualizada sin modificar todavía el original.
+            Usuario actualizado = new Usuario(
+                id,
+                nombre,
+                nombreUsuario,
+                fechaNacimiento,
+                pesoKg,
+                alturaMetros,
+                correoElectronico);
+
+            // Preparar una lista nueva para guardar los cambios.
+            List<Usuario> usuariosActualizados = usuarios
+                .Select(u => u.Id == id ? actualizado : u)
+                .ToList();
+
+            // Guardar primero en JSON.
+            repositorio.GuardarUsuarios(usuariosActualizados);
+
+            // Actualizar la lista en memoria solo si se guardó correctamente.
+            int indice = usuarios.FindIndex(u => u.Id == id);
+            usuarios[indice] = actualizado;
+        }
+
     }
 }
