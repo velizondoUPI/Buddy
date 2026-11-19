@@ -8,11 +8,14 @@ using Buddy.Data;
 
 namespace Buddy.Controllers
 {
-    public class UsuarioController
+    public class UsuarioController : ICuentasRegistradas
     {
         private readonly List<Usuario> usuarios;
         private readonly UsuarioRepository repositorio;
         private int siguienteId;
+
+        // Cuentas de otro tipo (entrenadores) que también deben ser únicas.
+        private ICuentasRegistradas? cuentasExternas;
 
         public UsuarioController()
         {
@@ -25,6 +28,52 @@ namespace Buddy.Controllers
             siguienteId = usuarios.Count > 0
                 ? usuarios.Max(u => u.Id) + 1
                 : 1;
+        }
+
+        // Conecta las cuentas de entrenadores para evitar duplicados
+        // de nombre de usuario y correo entre ambos tipos de cuenta.
+        public void ConfigurarCuentasExternas(ICuentasRegistradas cuentas)
+        {
+            cuentasExternas = cuentas
+                ?? throw new ArgumentNullException(nameof(cuentas));
+        }
+
+        public bool ExisteNombreUsuario(string nombreUsuario)
+        {
+            if (string.IsNullOrWhiteSpace(nombreUsuario))
+                return false;
+
+            string buscado = nombreUsuario.Trim();
+
+            return usuarios.Any(u =>
+                u.NombreUsuario.Equals(buscado, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public bool ExisteCorreo(string correoElectronico)
+        {
+            if (string.IsNullOrWhiteSpace(correoElectronico))
+                return false;
+
+            string buscado = correoElectronico.Trim();
+
+            return usuarios.Any(u =>
+                !string.IsNullOrWhiteSpace(u.CorreoElectronico) &&
+                u.CorreoElectronico.Equals(buscado, StringComparison.OrdinalIgnoreCase));
+        }
+
+        // Comprueba si el nombre de usuario o el correo pertenecen a un entrenador.
+        private void ValidarCuentasExternas(string? nombreUsuario, string correoElectronico)
+        {
+            if (cuentasExternas == null)
+                return;
+
+            if (cuentasExternas.ExisteNombreUsuario(nombreUsuario ?? string.Empty))
+                throw new ArgumentException(
+                    "El nombre de usuario ya está registrado.");
+
+            if (cuentasExternas.ExisteCorreo(correoElectronico))
+                throw new ArgumentException(
+                    "El correo electrónico ya está registrado.");
         }
 
         public Usuario RegistrarUsuario(
@@ -82,6 +131,9 @@ namespace Buddy.Controllers
                 throw new ArgumentException(
                     "El correo electrónico ya está registrado.");
             }
+
+            // Evitar duplicados con las cuentas de entrenadores.
+            ValidarCuentasExternas(nombreUsuario, correoElectronico);
 
             // Crear el usuario utilizando el modelo.
             Usuario nuevoUsuario = new Usuario(
@@ -169,6 +221,9 @@ namespace Buddy.Controllers
                     StringComparison.OrdinalIgnoreCase)))
                 throw new ArgumentException(
                     "El correo electrónico ya está registrado.");
+
+            // Evitar duplicados con las cuentas de entrenadores.
+            ValidarCuentasExternas(nombreUsuario, correoElectronico);
 
             // Crear la versión actualizada sin modificar todavía el original.
             Usuario actualizado = new Usuario(

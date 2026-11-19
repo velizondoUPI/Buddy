@@ -17,11 +17,16 @@ namespace Buddy
             ApplicationConfiguration.Initialize();
 
             UsuarioController usuarioController;
+            EntrenadorController entrenadorController;
 
             try
             {
-                // Un único controlador compartido por todos los formularios.
+                // Controladores únicos compartidos por todos los formularios.
                 usuarioController = new UsuarioController();
+                entrenadorController = new EntrenadorController(usuarioController);
+
+                // Validar duplicados de usuario y correo en ambos sentidos.
+                usuarioController.ConfigurarCuentasExternas(entrenadorController);
             }
             catch (Exception ex) when (
                 ex is InvalidOperationException ||
@@ -29,14 +34,14 @@ namespace Buddy
                 ex is UnauthorizedAccessException)
             {
                 MessageBox.Show(
-                    "No se pudieron cargar los usuarios de Buddy.\n\n" + ex.Message,
+                    "No se pudieron cargar los datos de Buddy.\n\n" + ex.Message,
                     "Buddy - Error al iniciar",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 return;
             }
 
-            Application.Run(new FrmConsultaUsuarios(usuarioController));
+            Application.Run(new FrmPrincipal(usuarioController, entrenadorController));
         }
     }
 }
