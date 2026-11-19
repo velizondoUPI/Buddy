@@ -18,6 +18,8 @@ namespace Buddy
 
             UsuarioController usuarioController;
             EntrenadorController entrenadorController;
+            RutinaController rutinaController;
+            AsignacionRutinaController asignacionController;
 
             try
             {
@@ -27,6 +29,13 @@ namespace Buddy
 
                 // Validar duplicados de usuario y correo en ambos sentidos.
                 usuarioController.ConfigurarCuentasExternas(entrenadorController);
+
+                // Rutinas de ejercicio, validadas contra los entrenadores registrados.
+                rutinaController = new RutinaController(entrenadorController);
+
+                // Asignaciones de rutinas a usuarios.
+                asignacionController = new AsignacionRutinaController(
+                    usuarioController, entrenadorController, rutinaController);
             }
             catch (Exception ex) when (
                 ex is InvalidOperationException ||
@@ -41,7 +50,8 @@ namespace Buddy
                 return;
             }
 
-            Application.Run(new FrmPrincipal(usuarioController, entrenadorController));
+            Application.Run(new FrmPrincipal(
+                usuarioController, entrenadorController, rutinaController, asignacionController));
         }
     }
 }

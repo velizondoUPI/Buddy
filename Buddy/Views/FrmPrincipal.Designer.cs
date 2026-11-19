@@ -36,8 +36,13 @@ namespace Buddy.Views
             grpEntrenadores = new GroupBox();
             btnRegistrarEntrenador = new Button();
             btnConsultarEntrenadores = new Button();
+            grpRutinas = new GroupBox();
+            btnCrearRutina = new Button();
+            btnAsignarRutina = new Button();
+            btnConsultarAsignaciones = new Button();
             grpUsuarios.SuspendLayout();
             grpEntrenadores.SuspendLayout();
+            grpRutinas.SuspendLayout();
             SuspendLayout();
             //
             // lblTitulo
@@ -122,11 +127,54 @@ namespace Buddy.Views
             btnConsultarEntrenadores.UseVisualStyleBackColor = true;
             btnConsultarEntrenadores.Click += btnConsultarEntrenadores_Click;
             //
+            // grpRutinas
+            //
+            grpRutinas.Controls.Add(btnCrearRutina);
+            grpRutinas.Controls.Add(btnAsignarRutina);
+            grpRutinas.Controls.Add(btnConsultarAsignaciones);
+            grpRutinas.Location = new Point(40, 375);
+            grpRutinas.Name = "grpRutinas";
+            grpRutinas.Size = new Size(340, 160);
+            grpRutinas.TabIndex = 4;
+            grpRutinas.TabStop = false;
+            grpRutinas.Text = "Rutinas";
+            //
+            // btnCrearRutina
+            //
+            btnCrearRutina.Location = new Point(20, 30);
+            btnCrearRutina.Name = "btnCrearRutina";
+            btnCrearRutina.Size = new Size(300, 35);
+            btnCrearRutina.TabIndex = 0;
+            btnCrearRutina.Text = "Crear rutina de ejercicio";
+            btnCrearRutina.UseVisualStyleBackColor = true;
+            btnCrearRutina.Click += btnCrearRutina_Click;
+            //
+            // btnAsignarRutina
+            //
+            btnAsignarRutina.Location = new Point(20, 72);
+            btnAsignarRutina.Name = "btnAsignarRutina";
+            btnAsignarRutina.Size = new Size(300, 35);
+            btnAsignarRutina.TabIndex = 1;
+            btnAsignarRutina.Text = "Asignar rutina a usuario";
+            btnAsignarRutina.UseVisualStyleBackColor = true;
+            btnAsignarRutina.Click += btnAsignarRutina_Click;
+            //
+            // btnConsultarAsignaciones
+            //
+            btnConsultarAsignaciones.Location = new Point(20, 114);
+            btnConsultarAsignaciones.Name = "btnConsultarAsignaciones";
+            btnConsultarAsignaciones.Size = new Size(300, 35);
+            btnConsultarAsignaciones.TabIndex = 2;
+            btnConsultarAsignaciones.Text = "Consultar rutinas asignadas";
+            btnConsultarAsignaciones.UseVisualStyleBackColor = true;
+            btnConsultarAsignaciones.Click += btnConsultarAsignaciones_Click;
+            //
             // FrmPrincipal
             //
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(420, 390);
+            ClientSize = new Size(420, 555);
+            Controls.Add(grpRutinas);
             Controls.Add(grpEntrenadores);
             Controls.Add(grpUsuarios);
             Controls.Add(lblSubtitulo);
@@ -138,6 +186,7 @@ namespace Buddy.Views
             Text = "Buddy - Menú principal";
             grpUsuarios.ResumeLayout(false);
             grpEntrenadores.ResumeLayout(false);
+            grpRutinas.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -152,5 +201,9 @@ namespace Buddy.Views
         private GroupBox grpEntrenadores;
         private Button btnRegistrarEntrenador;
         private Button btnConsultarEntrenadores;
+        private GroupBox grpRutinas;
+        private Button btnCrearRutina;
+        private Button btnAsignarRutina;
+        private Button btnConsultarAsignaciones;
     }
 }
