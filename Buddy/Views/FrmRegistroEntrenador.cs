@@ -19,52 +19,13 @@ namespace Buddy.Views
                 ?? throw new ArgumentNullException(nameof(entrenadorController));
         }
 
-        // Elemento de las listas desplegables con su texto en español.
-        private sealed class OpcionLista<T> where T : struct, Enum
-        {
-            public T Valor { get; }
-            public string Texto { get; }
-
-            public OpcionLista(T valor, string texto)
-            {
-                Valor = valor;
-                Texto = texto;
-            }
-
-            public override string ToString() => Texto;
-        }
-
-        public static string ObtenerTexto(TipoEntrenador tipo) => tipo switch
-        {
-            TipoEntrenador.EntrenadorPersonal => "Entrenador personal",
-            TipoEntrenador.InstructorClasesGrupales => "Instructor de clases grupales",
-            _ => tipo.ToString()
-        };
-
-        public static string ObtenerTexto(EspecialidadEntrenador especialidad) => especialidad switch
-        {
-            EspecialidadEntrenador.EntrenamientoFuerza => "Entrenamiento de fuerza",
-            EspecialidadEntrenador.AcondicionamientoFisico => "Acondicionamiento físico",
-            EspecialidadEntrenador.Yoga => "Yoga",
-            EspecialidadEntrenador.Zumba => "Zumba",
-            EspecialidadEntrenador.Spinning => "Spinning",
-            EspecialidadEntrenador.Crossfit => "Crossfit",
-            _ => especialidad.ToString()
-        };
-
         private void FrmRegistroEntrenador_Load(object sender, EventArgs e)
         {
             // La fecha de nacimiento debe ser anterior a hoy.
             dtpFechaNacimiento.MaxDate = DateTime.Today.AddDays(-1);
 
-            cmbTipo.Items.Clear();
-            foreach (TipoEntrenador tipo in Enum.GetValues<TipoEntrenador>())
-                cmbTipo.Items.Add(new OpcionLista<TipoEntrenador>(tipo, ObtenerTexto(tipo)));
-
-            cmbEspecialidad.Items.Clear();
-            foreach (EspecialidadEntrenador especialidad in Enum.GetValues<EspecialidadEntrenador>())
-                cmbEspecialidad.Items.Add(
-                    new OpcionLista<EspecialidadEntrenador>(especialidad, ObtenerTexto(especialidad)));
+            TextosEntrenador.LlenarTipos(cmbTipo);
+            TextosEntrenador.LlenarEspecialidades(cmbEspecialidad);
 
             LimpiarCampos();
         }
@@ -137,10 +98,10 @@ namespace Buddy.Views
                 return Advertir(
                     "La confirmación no coincide con la contraseña.", txtConfirmarContrasena);
 
-            if (cmbTipo.SelectedItem is not OpcionLista<TipoEntrenador>)
+            if (TextosEntrenador.ValorSeleccionado<TipoEntrenador>(cmbTipo) == null)
                 return Advertir("Debe seleccionar el tipo de entrenador.", cmbTipo);
 
-            if (cmbEspecialidad.SelectedItem is not OpcionLista<EspecialidadEntrenador>)
+            if (TextosEntrenador.ValorSeleccionado<EspecialidadEntrenador>(cmbEspecialidad) == null)
                 return Advertir("Debe seleccionar una especialidad.", cmbEspecialidad);
 
             return true;
@@ -151,8 +112,9 @@ namespace Buddy.Views
             if (!ValidarCampos())
                 return;
 
-            var tipo = (OpcionLista<TipoEntrenador>)cmbTipo.SelectedItem!;
-            var especialidad = (OpcionLista<EspecialidadEntrenador>)cmbEspecialidad.SelectedItem!;
+            TipoEntrenador? tipo = TextosEntrenador.ValorSeleccionado<TipoEntrenador>(cmbTipo);
+            EspecialidadEntrenador? especialidad =
+                TextosEntrenador.ValorSeleccionado<EspecialidadEntrenador>(cmbEspecialidad);
 
             try
             {
@@ -169,8 +131,8 @@ namespace Buddy.Views
                     telefono: txtTelefono.Text,
                     contrasena: txtContrasena.Text,
                     confirmacionContrasena: txtConfirmarContrasena.Text,
-                    tipo: tipo.Valor,
-                    especialidad: especialidad.Valor,
+                    tipo: tipo,
+                    especialidad: especialidad,
                     certificaciones: txtCertificaciones.Text,
                     aniosExperiencia: (int)nudAniosExperiencia.Value);
 
@@ -181,13 +143,13 @@ namespace Buddy.Views
                     $"Nombre: {nuevo.NombreCompleto}\n" +
                     $"Usuario: {nuevo.NombreUsuario}\n" +
                     $"Correo: {nuevo.CorreoElectronico}\n" +
-                    $"Teléfono: {nuevo.Telefono}\n" +
+                    $"Teléfono: {TextosEntrenador.FormatearTelefono(nuevo.Telefono)}\n" +
                     $"Edad: {nuevo.Edad} años\n" +
-                    $"Tipo: {ObtenerTexto(nuevo.Tipo)}\n" +
-                    $"Especialidad: {ObtenerTexto(nuevo.Especialidad)}\n" +
+                    $"Tipo: {TextosEntrenador.Texto(nuevo.Tipo)}\n" +
+                    $"Especialidad: {TextosEntrenador.Texto(nuevo.Especialidad)}\n" +
                     $"Experiencia: {nuevo.AniosExperiencia} años\n" +
                     $"Rol: {nuevo.Rol}\n" +
-                    $"Estado: {nuevo.Estado}\n" +
+                    $"Estado: {TextosEntrenador.Texto(nuevo.Estado)}\n" +
                     $"Fecha de registro: {nuevo.FechaRegistro:g}",
                     "Buddy - Registro exitoso",
                     MessageBoxButtons.OK,

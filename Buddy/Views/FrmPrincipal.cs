@@ -34,6 +34,12 @@ namespace Buddy.Views
             frmRegistro.ShowDialog(this);
         }
 
+        private void btnConsultarEntrenadores_Click(object sender, EventArgs e)
+        {
+            using var frmConsulta = new FrmConsultaEntrenadores(entrenadorController);
+            frmConsulta.ShowDialog(this);
+        }
+
         private void btnRegistrarEntrenador_Click(object sender, EventArgs e)
         {
             using var frmRegistro = new FrmRegistroEntrenador(entrenadorController);

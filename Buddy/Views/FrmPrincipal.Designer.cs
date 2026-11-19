@@ -35,6 +35,7 @@ namespace Buddy.Views
             btnRegistrarUsuario = new Button();
             grpEntrenadores = new GroupBox();
             btnRegistrarEntrenador = new Button();
+            btnConsultarEntrenadores = new Button();
             grpUsuarios.SuspendLayout();
             grpEntrenadores.SuspendLayout();
             SuspendLayout();
@@ -92,29 +93,40 @@ namespace Buddy.Views
             //
             // grpEntrenadores
             //
+            grpEntrenadores.Controls.Add(btnConsultarEntrenadores);
             grpEntrenadores.Controls.Add(btnRegistrarEntrenador);
             grpEntrenadores.Location = new Point(40, 240);
             grpEntrenadores.Name = "grpEntrenadores";
-            grpEntrenadores.Size = new Size(340, 80);
+            grpEntrenadores.Size = new Size(340, 120);
             grpEntrenadores.TabIndex = 3;
             grpEntrenadores.TabStop = false;
             grpEntrenadores.Text = "Entrenadores";
             //
             // btnRegistrarEntrenador
             //
-            btnRegistrarEntrenador.Location = new Point(20, 30);
+            btnRegistrarEntrenador.Location = new Point(20, 72);
             btnRegistrarEntrenador.Name = "btnRegistrarEntrenador";
             btnRegistrarEntrenador.Size = new Size(300, 35);
-            btnRegistrarEntrenador.TabIndex = 0;
+            btnRegistrarEntrenador.TabIndex = 1;
             btnRegistrarEntrenador.Text = "Registrar entrenador";
             btnRegistrarEntrenador.UseVisualStyleBackColor = true;
             btnRegistrarEntrenador.Click += btnRegistrarEntrenador_Click;
+            //
+            // btnConsultarEntrenadores
+            //
+            btnConsultarEntrenadores.Location = new Point(20, 30);
+            btnConsultarEntrenadores.Name = "btnConsultarEntrenadores";
+            btnConsultarEntrenadores.Size = new Size(300, 35);
+            btnConsultarEntrenadores.TabIndex = 0;
+            btnConsultarEntrenadores.Text = "Consultar y actualizar entrenadores";
+            btnConsultarEntrenadores.UseVisualStyleBackColor = true;
+            btnConsultarEntrenadores.Click += btnConsultarEntrenadores_Click;
             //
             // FrmPrincipal
             //
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(420, 350);
+            ClientSize = new Size(420, 390);
             Controls.Add(grpEntrenadores);
             Controls.Add(grpUsuarios);
             Controls.Add(lblSubtitulo);
@@ -139,5 +151,6 @@ namespace Buddy.Views
         private Button btnRegistrarUsuario;
         private GroupBox grpEntrenadores;
         private Button btnRegistrarEntrenador;
+        private Button btnConsultarEntrenadores;
     }
 }
